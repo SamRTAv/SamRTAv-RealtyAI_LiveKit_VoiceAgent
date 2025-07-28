@@ -423,6 +423,131 @@ if __name__ == "__main__":
 
 
 
+# import os
+# import asyncio
+# import numpy as np
+# import sounddevice as sd
+# from dotenv import load_dotenv
+# from livekit.plugins import(
+#     deepgram
+# )
+# # from deepgram import DeepgramClient, LiveOptions, LiveTranscriptionEvents
+# from livekit import agents
+# from livekit.agents import Agent, AgentSession
+# from livekit.plugins import elevenlabs
+
+# # Load env variables
+# load_dotenv(dotenv_path=".env.local")
+# LIVEKIT_API_KEY = os.getenv("LIVEKIT_API_KEY")
+# LIVEKIT_API_SECRET = os.getenv("LIVEKIT_API_SECRET")
+# LIVEKIT_URL = os.getenv("LIVEKIT_URL")
+# ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+# ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID")
+# DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
+
+# # Audio config
+# SAMPLE_RATE = 16000
+# CHANNELS = 1
+
+# # Custom Agent that handles text
+# class Assistant(Agent):
+#     async def on_text(self, text: str) -> str:
+#         print(f"User: {text}")
+#         return await self.generate_reply(text)
+
+# # Entrypoint for LiveKit agent session
+# async def entrypoint(ctx: agents.JobContext):
+#     session = AgentSession(
+#         llm=agents.openai.LLM(model="gpt-4o-mini"),  # Or any other
+#         stt=None,  # No built-in STT
+#         tts=elevenlabs.TTS(
+#             api_key=ELEVENLABS_API_KEY,
+#             voice_id=ELEVENLABS_VOICE_ID
+#         ),
+#     )
+
+#     await session.start(room=ctx.room, agent=Assistant())
+#     await ctx.connect()
+
+#     # Run Deepgram STT in parallel
+#     asyncio.create_task(run_deepgram_stt(session))
+
+#     await session.generate_reply(instructions="Hi! I’m your assistant. How can I help you today?")
+
+# # Gating logic for transcripts
+# def gate_passes(transcript: str) -> bool:
+#     words = transcript.strip().split()
+#     return len(words) >= 3  # Threshold: minimum 3 words
+
+# # Deepgram streaming and LiveKit integration
+# async def run_deepgram_stt(session: AgentSession):
+#     deepgram = DeepgramClient(api_key=DEEPGRAM_API_KEY)
+#     dg_conn = deepgram.listen.v("1")
+
+#     # Handler for received transcript
+#     def on_message(self, result, **kwargs):
+#         if not result.is_final:
+#             return
+#         transcript = result.channel.alternatives[0].transcript
+#         if transcript and gate_passes(transcript):
+#             print(f"✅ Passed: {transcript}")
+#             asyncio.run_coroutine_threadsafe(session.process_text(transcript), asyncio.get_event_loop())
+#         else:
+#             print(f"❌ Rejected: {transcript}")
+
+#     def on_error(error, **kwargs):
+#         print(f"[Deepgram ERROR] {error}")
+
+#     dg_conn.on(LiveTranscriptionEvents.Transcript, on_message)
+#     dg_conn.on(LiveTranscriptionEvents.Error, on_error)
+
+#     options = LiveOptions(
+#         model="nova-3",
+#         encoding="linear16",
+#         sample_rate=SAMPLE_RATE,
+#         channels=CHANNELS,
+#         interim_results=True
+#     )
+
+#     if not dg_conn.start(options):
+#         print("Failed to start Deepgram connection")
+#         return
+
+#     print("🎙️ Start speaking! Press Ctrl+C to stop.")
+
+#     # Microphone stream
+#     try:
+#         with sd.InputStream(
+#             samplerate=SAMPLE_RATE,
+#             channels=CHANNELS,
+#             dtype='float32',
+#             callback=lambda indata, *_: dg_conn.send((indata * 32767).astype(np.int16).tobytes())
+#         ):
+#             while True:
+#                 await asyncio.sleep(0.1)
+#     except KeyboardInterrupt:
+#         print("\n🔴 Stopping...")
+#     finally:
+#         dg_conn.finish()
+
+# # CLI runner
+# if __name__ == "__main__":
+#     agents.cli.run_app(
+#         agents.WorkerOptions(
+#             entrypoint_fnc=entrypoint,
+#             api_key=LIVEKIT_API_KEY,
+#             api_secret=LIVEKIT_API_SECRET,
+#             url=LIVEKIT_URL
+#         )
+#     )
+
+
+
+
+
+
+
+
 
 
 
