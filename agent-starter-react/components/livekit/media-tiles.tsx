@@ -143,7 +143,7 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
                   <MotionAgentTile
                     key="agent"
                     layoutId="agent"
-                    {...animationProps as any}
+                    {...animationProps}
                     animate={agentAnimate}
                     transition={agentLayoutTransition}
                     state={agentState}
