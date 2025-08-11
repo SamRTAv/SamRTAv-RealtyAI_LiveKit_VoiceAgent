@@ -6,8 +6,9 @@ const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
 const LIVEKIT_URL = process.env.LIVEKIT_URL;
 
-console.log('API_KEY',API_KEY)
-console.log('API_SECRET',API_SECRET)
+console.log('API_KEY', API_KEY);
+console.log('API_SECRET', API_SECRET);
+
 // don't cache the results
 export const revalidate = 0;
 
@@ -59,8 +60,9 @@ export async function GET() {
 }
 
 function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) {
-  console.log('API_KEY',API_KEY)
-console.log('API_SECRET',API_SECRET)
+  console.log('API_KEY', API_KEY);
+  console.log('API_SECRET', API_SECRET);
+
   const at = new AccessToken(API_KEY, API_SECRET, {
     ...userInfo,
     ttl: '15m',
