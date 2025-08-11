@@ -342,18 +342,24 @@
 
 
 from dotenv import load_dotenv
+import jwt
+import time
+import httpx
+import os
 import os
 from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions
 from livekit.plugins import (
     openai,
     cartesia,
-    deepgram,
+    # deepgram,
     # noise_cancellation,
     silero,
     elevenlabs
 )
 # from livekit.plugins.turn_detector.multilingual import MultilingualModel
+
+import deepgram
 
 LIVEKIT_API_KEY = os.getenv("LIVEKIT_API_KEY")
 LIVEKIT_API_SECRET = os.getenv("LIVEKIT_API_SECRET")
@@ -371,7 +377,8 @@ ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "EXAVITQu4vr4xnSDxMaL")
 
 class Assistant(Agent):
     def __init__(self) -> None:
-        super().__init__(instructions="You are a helpful voice AI assistant.")
+        super().__init__(instructions="You are a helpful voice AI assistant. Keep the responses short not more than 2 sentences")
+
 
 
 async def entrypoint(ctx: agents.JobContext):
@@ -381,7 +388,7 @@ async def entrypoint(ctx: agents.JobContext):
         # tts=cartesia.TTS(model="sonic-2", voice="f786b574-daa5-4673-aa0c-cbe3e8534c02"),
         vad=silero.VAD.load(),
         # turn_detection=MultilingualModel(),
-        llm=openai.LLM(model="llama-3.3-70b-versatile"),
+        llm=openai.LLM(model="llama-3.3-70b-versatile"), #groq
         stt=deepgram.STT(model="nova-3"),
         tts=elevenlabs.TTS(  # Changed from cartesia to elevenlabs
             api_key=ELEVENLABS_API_KEY,
