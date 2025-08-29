@@ -355,7 +355,7 @@ from livekit.plugins import (
     # deepgram,
     # noise_cancellation,
     silero,
-    elevenlabs
+    sarvam
 )
 # from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
