@@ -388,14 +388,24 @@ async def entrypoint(ctx: agents.JobContext):
         # tts=cartesia.TTS(model="sonic-2", voice="f786b574-daa5-4673-aa0c-cbe3e8534c02"),
         vad=silero.VAD.load(),
         # turn_detection=MultilingualModel(),
-        llm=openai.LLM(model="llama-3.3-70b-versatile"), #groq
-        stt=deepgram.STT(model="nova-3"),
-        tts=elevenlabs.TTS(  # Changed from cartesia to elevenlabs
-            api_key=ELEVENLABS_API_KEY,
-            voice_id=ELEVENLABS_VOICE_ID,
-            # model="eleven_monolingual_v2",
-            # stability=0.5,
-            # similarity_boost=0.75
+        llm=openai.LLM(model="llama-3.3-70b-versatile"),  # groq
+        
+        # stt=deepgram.STT(model="nova-3"),
+        stt=sarvam.STT(
+            language="hi-IN",
+            model="saarika:v2.5",
+        ),
+
+        # tts=elevenlabs.TTS(  # Changed from cartesia to elevenlabs
+        #     api_key=ELEVENLABS_API_KEY,
+        #     voice_id=ELEVENLABS_VOICE_ID,
+        #     # model="eleven_monolingual_v2",
+        #     # stability=0.5,
+        #     # similarity_boost=0.75
+        # ),
+        tts=sarvam.TTS(
+            target_language_code="hi-IN",
+            speaker="anushka",
         ),
     )
 
